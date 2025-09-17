@@ -1,10 +1,3 @@
-# Badger Badger Badger, Mushroom Mushroom!
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Firesphere/silverstripe-stripeslack/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Firesphere/silverstripe-stripeslack/?branch=master)
-[![codecov](https://codecov.io/gh/Firesphere/silverstripe-stripeslack/branch/master/graph/badge.svg)](https://codecov.io/gh/Firesphere/silverstripe-stripeslack)
-[![CircleCI](https://circleci.com/gh/Firesphere/silverstripe-stripeslack/tree/master.svg?style=svg)](https://circleci.com/gh/Firesphere/silverstripe-stripeslack/tree/master)
-[![Maintainability](https://api.codeclimate.com/v1/badges/0cb79fe7bfa3c2bc39f0/maintainability)](https://codeclimate.com/github/Firesphere/silverstripe-stripeslack/maintainability)
-
-
 # StripeSlack
 
 Inviting users to your public Slack channel is pretty hard to automate.
@@ -13,6 +6,10 @@ This module intents to make it at least a bit easier.
 
 Although the initial steps seem overwhelming, I've tried to write it out as detailed as possible.
 Once you've done it once, the next time will be a breeze.
+
+## `cms6` branch upgrade notes
+
+Simply took the `ss4` branch and updated the `composer.json` requirements to allow CMS 6 (or CMS 5), and removed files related to CI.
 
 ## Why StripeSlack
 

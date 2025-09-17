@@ -17,8 +17,8 @@
     }
   ],
   "require": {
-    "silverstripe/cms": "^4.0",
-    "guzzlehttp/guzzle": "~6.0"
+    "silverstripe/cms": "^5 || ^6",
+    "guzzlehttp/guzzle": "^6 || ^7"
   },
   "require-dev": {
     "scriptfusion/phpunit-immediate-exception-printer": "^2.0"

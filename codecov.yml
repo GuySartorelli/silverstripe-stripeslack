@@ -1,6 +1,0 @@
-ignore: # Ignoring irrelevant code. Default SS stuff should not be called out by Codecoverage
-  - "src/actions"
-  - "src/admins"
-  - "src/extensions"
-  - "src/forms"
-  - "src/models"
