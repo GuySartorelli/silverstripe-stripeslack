@@ -12,7 +12,7 @@ use SilverStripe\Forms\PasswordField;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\TreeDropdownField;
-use SilverStripe\ORM\DataExtension;
+use SilverStripe\Core\Extension;
 use SilverStripe\SiteConfig\SiteConfig;
 
 /**
@@ -30,7 +30,7 @@ use SilverStripe\SiteConfig\SiteConfig;
  * @method SiteTree SlackBackURL()
  * @method SiteTree SlackErrorBackURL()
  */
-class SiteConfigExtension extends DataExtension
+class SiteConfigExtension extends Extension
 {
     private static $db = [
         'SlackURL'          => 'Varchar(255)',

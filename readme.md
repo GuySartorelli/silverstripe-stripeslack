@@ -11,6 +11,8 @@ Once you've done it once, the next time will be a breeze.
 
 Simply took the `ss4` branch and updated the `composer.json` requirements to allow CMS 6 (or CMS 5), and removed files related to CI.
 
+Also changed `DataExtension` to `Extension` as the former was removed in CMS 6.
+
 ## Why StripeSlack
 
 Unlike other services that are require a third party to have full administrative access to your Slack Workspace,
