@@ -88,7 +88,7 @@ class SlackStatusController extends Controller
         $url = 'api/channels.info?t=' . time();
 
         $response = $service->request('POST', $url, $params);
-        $result = Convert::json2array($response->getBody());
+        $result = json_decode($response->getBody(), true);
 
         return $this->validateResponse($count, $result);
     }
