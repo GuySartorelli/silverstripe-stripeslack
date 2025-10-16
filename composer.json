@@ -17,11 +17,11 @@
     }
   ],
   "require": {
-    "silverstripe/cms": "^5 || ^6",
-    "guzzlehttp/guzzle": "^6 || ^7"
+    "silverstripe/cms": "^6",
+    "guzzlehttp/guzzle": "^7"
   },
   "require-dev": {
-    "scriptfusion/phpunit-immediate-exception-printer": "^2.0"
+    "phpunit/phpunit": "^11.3"
   },
   "autoload": {
     "psr-4": {
