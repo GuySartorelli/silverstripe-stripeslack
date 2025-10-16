@@ -83,7 +83,7 @@ class SlackAuthController extends Controller
     public function saveToken($response, $config)
     {
         // Convert the JSON to use in our config (hidden from user view)
-        $result = Convert::json2array($response->getBody());
+        $result = json_decode($response->getBody(), true);
 
         $config->SlackToken = $result['access_token'];
         $config->write();

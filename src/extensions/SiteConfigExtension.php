@@ -55,7 +55,7 @@ class SiteConfigExtension extends Extension
         'Extended'     => '<p><a href="https://github.com/Firesphere/silverstripe-stripeslack/blob/master/readme.md">Extensive instructions can be found on GitHub</a></p>'
     ];
 
-    public function updateFieldLabels(&$labels)
+    protected function updateFieldLabels(&$labels)
     {
         $labels['SlackURL'] = _t('StripeSlackSiteConfigExtension.SlackURL', 'URL Of the Slack channel');
         $labels['SlackClientID'] = _t('StripeSlackSiteConfigExtension.SlackClientID', 'Client ID for your Slack App');
@@ -75,7 +75,7 @@ class SiteConfigExtension extends Extension
         );
     }
 
-    public function updateCMSFields(FieldList $fields)
+    protected function updateCMSFields(FieldList $fields)
     {
         $fields->removeByName(['SlackToken']);
         $fields->addFieldsToTab('Root.Slack', [
@@ -123,9 +123,8 @@ class SiteConfigExtension extends Extension
     /**
      * Clear out the secrets if the checkbox is checked
      */
-    public function onBeforeWrite()
+    protected function onBeforeWrite()
     {
-        parent::onBeforeWrite();
         if ($this->owner->ClearSecrets) {
             $this->owner->SlackClientSecret = '';
             $this->owner->SlackToken = '';
