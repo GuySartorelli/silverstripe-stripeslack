@@ -26,10 +26,10 @@ class SlackSignupForm extends Form
      * @param null $validator
      */
     public function __construct(
-        Controller $controller = null,
-        $name,
-        FieldList $fields = null,
-        FieldList $actions = null,
+        ?Controller $controller = null,
+        string $name = 'SlackSignupForm',
+        ?FieldList $fields = null,
+        ?FieldList $actions = null,
         $validator = null
     ) {
         $this->siteConfig = SiteConfig::current_site_config();
