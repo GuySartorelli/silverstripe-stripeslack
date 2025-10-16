@@ -5,17 +5,16 @@ namespace Firesphere\StripeSlack\Test;
 use Firesphere\StripeSlack\Controller\SlackStatusController;
 use Firesphere\StripeSlack\Model\SlackUserCount;
 use GuzzleHttp\Client;
+use PHPUnit\Framework\Attributes\DataProvider;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Dev\SapphireTest;
-use SilverStripe\ORM\DataList;
 use SilverStripe\SiteConfig\SiteConfig;
 
 class SlackStatusControllerTest extends SapphireTest
 {
     protected static $fixture_file = '../fixtures/count.yml';
 
-
-    protected function setUp()
+    protected function setUp(): void
     {
         $config = SiteConfig::current_site_config();
         $config->SlackURL = 'https://team.slack.com';
@@ -25,9 +24,8 @@ class SlackStatusControllerTest extends SapphireTest
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
-        /** @var DataList|SlackUserCount[] $counts */
         $counts = SlackUserCount::get();
         foreach ($counts as $count) {
             $count->delete();
@@ -44,7 +42,7 @@ class SlackStatusControllerTest extends SapphireTest
         $this->assertEquals('', $controller->usercount());
     }
 
-    public function additionProvider()
+    public static function additionProvider()
     {
         return [
             [[25, 60], 20],
@@ -53,11 +51,7 @@ class SlackStatusControllerTest extends SapphireTest
         ];
     }
 
-    /**
-     * @dataProvider additionProvider
-     * @param $expected
-     * @param $amount
-     */
+    #[DataProvider('additionProvider')]
     public function testGetSVGSettings($expected, $amount)
     {
         $controller = SlackStatusController::create(new HTTPRequest('GET', '/SlackStatus/usercount'));
@@ -71,11 +65,7 @@ class SlackStatusControllerTest extends SapphireTest
         $this->assertEquals(10, $controller->getStatus(SiteConfig::current_site_config()));
     }
 
-    /**
-     * @dataProvider additionProvider
-     * @param $expected
-     * @param $amount
-     */
+    #[DataProvider('additionProvider')]
     public function testSVG($expected, $amount)
     {
         $controller = SlackStatusController::create(new HTTPRequest('GET', '/SlackStatus/badge'));

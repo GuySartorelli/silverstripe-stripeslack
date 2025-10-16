@@ -30,7 +30,8 @@
       "Firesphere\\StripeSlack\\Admin\\": "src/admins",
       "Firesphere\\StripeSlack\\Parser\\": "src/shortcodes",
       "Firesphere\\StripeSlack\\Extension\\": "src/extensions",
-      "Firesphere\\StripeSlack\\Controller\\": "src/controllers"
+      "Firesphere\\StripeSlack\\Controller\\": "src/controllers",
+      "Firesphere\\StripeSlack\\Test\\": "tests/unit"
     }
   },
   "extra": {

@@ -40,7 +40,7 @@ class StripeSlackShortcodeParserTest extends SapphireTest
             'stripeslack'
         );
 
-        $this->assertContains('name="Name"', $result);
-        $this->assertContains('name="Email"', $result);
+        $this->assertStringContainsString('name="Name"', $result);
+        $this->assertStringContainsString('name="Email"', $result);
     }
 }

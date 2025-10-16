@@ -13,7 +13,7 @@ class SlackInviteTest extends SapphireTest
 {
     protected static $fixture_file = '../fixtures/signups.yml';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
     }
@@ -36,7 +36,7 @@ class SlackInviteTest extends SapphireTest
         $invite->handleResult(['error' => 'not_authed']);
         $this->assertEquals('No valid Slack Token provided, please check your settings', $invite->Message);
         $invite->handleResult(['error' => 'already_invited']);
-        $this->assertContains('Invite successful', $invite->Message);
+        $this->assertStringContainsString('Invite successful', $invite->Message);
         $this->assertTrue((bool)$invite->Invited);
         $invite->handleResult(['ok' => 1]);
         $this->assertEquals('Invite successful', $invite->Message);
