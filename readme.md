@@ -7,12 +7,6 @@ This module intents to make it at least a bit easier.
 Although the initial steps seem overwhelming, I've tried to write it out as detailed as possible.
 Once you've done it once, the next time will be a breeze.
 
-## `cms6` branch upgrade notes
-
-Simply took the `ss4` branch and updated the `composer.json` requirements to allow CMS 6 (or CMS 5), and removed files related to CI.
-
-Also changed `DataExtension` to `Extension` as the former was removed in CMS 6.
-
 ## Why StripeSlack
 
 Unlike other services that are require a third party to have full administrative access to your Slack Workspace,
@@ -40,15 +34,13 @@ When done, you'll find it wasn't actually that hard after all, just a few steps 
 
 ## Installation
 
-- Option 1, with Composer:
+Use Composer:
 
-`composer require firesphere/stripeslack`
+```sh
+composer require firesphere/stripeslack
+```
 
-- Option 2, download:
-
-Download the zip from GitHub
-
-Finally, run `https://yourdomain.com/dev/build?flush=all`
+Then go to `https://yourdomain.com/dev/build?flush=1` or run `vendor/bin/sake db:build --flush` from CLI.
 
 ## Setting up Slack
 
@@ -117,8 +109,6 @@ The form relies completely on the provided `FormField` templates. So styling is 
 - [|] Add tests
 - [ ] Make invites sent to a certain channel
 - [x] Re-try sending invites via the CMS
-- [ ] Move away from `RestfulService` (Removed in SS4) to using `Guzzle`
-- [ ] SilverStripe 4 compatible version
 - [x] Add a shortcode to use [slackform] from the CMS
 
 # Cow?

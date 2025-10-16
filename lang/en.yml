@@ -18,10 +18,12 @@ en:
   SlackSignupForm:
     ConfigError: 'There is an error in the Slack Configuration'
     Email: 'My email address is'
+    Failure: 'Failed to send invite. Please retry again.'
     Intro: 'Fill out the form below to request access to Slack'
     Name: 'My name is'
     NoSuccessPage: 'An invite has been sent to your inbox'
     Submit: Submit
+    Success: 'Invite sent successfully.'
   StripeSlackSiteConfigExtension:
     ClearSecrets: 'Clear Secrets and Tokens'
     SlackBackURL: 'URL to redirect when request is successful'

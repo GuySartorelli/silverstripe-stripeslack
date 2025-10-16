@@ -25,7 +25,7 @@ class StripeSlackPageTest extends SapphireTest
 
     public function testSlackSignupFormSuccess()
     {
-        $this->assertInstanceOf(StripeSlackPageController::class, StripeSlackPageController::create()->success());
+        $this->assertInstanceOf(StripeSlackPageController::class, StripeSlackPageController::create()->yay());
     }
 
     public function testSlackSignupFormError()

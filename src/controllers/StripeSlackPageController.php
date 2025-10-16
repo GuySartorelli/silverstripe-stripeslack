@@ -17,7 +17,7 @@ class StripeSlackPageController extends PageController
 {
     private static $allowed_actions = [
         'SlackSignupForm',
-        'success',
+        'yay',
         'oops'
     ];
 
@@ -26,7 +26,7 @@ class StripeSlackPageController extends PageController
         return SlackSignupForm::create($this, __FUNCTION__);
     }
 
-    public function success()
+    public function yay()
     {
         return $this;
     }

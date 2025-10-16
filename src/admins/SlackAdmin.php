@@ -22,17 +22,19 @@ class SlackAdmin extends ModelAdmin
 
     private static $menu_icon = 'firesphere/stripeslack: client/dist/img/slack_logo.png';
 
+    public $showImportForm = false;
+
 
     public function getEditForm($id = null, $fields = null)
     {
         /** @var $this |Form $form */
         $form = parent::getEditForm($id, $fields);
         // Slightly pointless because it only manages 1 model, but ¯\_(ツ)_/¯
-        if ($this->modelClass === 'SlackInvite') {
+        if ($this->modelClass === SlackInvite::class) {
             $form->Fields()
-                ->fieldByName('SlackInvite')
+                ->dataFieldByName($this->sanitiseClassName(SlackInvite::class))
                 ->getConfig()
-                ->addComponent(new GridfieldInviteResendAction());
+                ->addComponent(GridfieldInviteResendAction::create());
         }
 
         return $form;

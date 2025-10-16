@@ -4,9 +4,11 @@ namespace Firesphere\StripeSlack\Controller;
 
 use Firesphere\StripeSlack\Model\SlackUserCount;
 use GuzzleHttp\Client;
+use Psr\Log\LoggerInterface;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Convert;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\FieldType\DBDatetime;
 use SilverStripe\ORM\ValidationException;
 use SilverStripe\SiteConfig\SiteConfig;
@@ -85,7 +87,8 @@ class SlackStatusController extends Controller
     {
         $service = $this->getClient($config);
         $params = $this->getRequestParams($config);
-        $url = 'api/channels.info?t=' . time();
+        $params['form_params']['include_num_members'] = 'true';
+        $url = 'api/conversations.info?t=' . time();
 
         $response = $service->request('POST', $url, $params);
         $result = json_decode($response->getBody(), true);
@@ -108,19 +111,28 @@ class SlackStatusController extends Controller
     /**
      * @param SlackUserCount $count
      * @param array $result
-     * @return int
+     * @return string|int
      */
     public function validateResponse($count, $result)
     {
-        if (isset($result['ok']) && $result['ok']) {
-            $userCount = count($result['channel']['members']);
-            $count->UserCount = $userCount;
-            $count->write();
-
-            return $userCount;
+        if (!isset($result['ok']) || !$result['ok']) {
+            // Log the failure so we can investigate
+            $logger = Injector::inst()->get(LoggerInterface::class);
+            $message = 'Failed to get number of members from Slack API.';
+            if (isset($result['error'])) {
+                $message .= 'Error: ' . $result['error'];
+            }
+            $logger->warning($message);
+            // Return "unknown" instead of 0 so it's clear we weren't able
+            // to get the count.
+            return 'unknown';
         }
 
-        return 0;
+        // Store the count for caching and return it
+        $userCount = $result['channel']['num_members'];
+        $count->UserCount = $userCount;
+        $count->write();
+        return $userCount;
     }
 
     /**

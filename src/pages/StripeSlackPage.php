@@ -2,6 +2,7 @@
 
 namespace Firesphere\StripeSlack\Page;
 
+use Firesphere\StripeSlack\Controller\StripeSlackPageController;
 use Page;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 
@@ -23,6 +24,9 @@ class StripeSlackPage extends Page
     ];
 
     private static $table_name = 'StripeSlackPage';
+
+    // Must define this explicitly because the namespace doesn't match
+    private static $controller_name = StripeSlackPageController::class;
 
     public function getCMSFields()
     {

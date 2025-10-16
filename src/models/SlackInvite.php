@@ -53,16 +53,13 @@ class SlackInvite extends DataObject implements PermissionProvider
         'not_authed'        => 'No valid Slack Token provided, please check your settings',
         'already_invited'   => 'User has already received an email invitation',
         'already_in_team'   => 'User is already part of the team',
+        'already_in_team_invited_user' => 'User is already part of the team or has already recieved an email invitation',
         'channel_not_found' => 'Provided channel ID does not match an existing channel in your workspace',
         'sent_recently'     => 'When using resend=true, the email has been sent recently already',
         'user_disabled'     => 'User account has been deactivated',
         'missing_scope'     => 'Using an access_token not authorized for "client" scope',
         'invalid_email'     => 'Invalid email address (e.g. "qwe"). Note that Slack does not recognize some email addresses even though they are technically valid. This is a known issue.',
         'not_allowed'       => 'When SSO is enabeld this method can not be used to invite new users except guests. The SCIM API needs to be used instead to invite new users. '
-    ];
-
-    private static $better_buttons_actions = [
-        'resendInvite'
     ];
 
     public function getCMSFields()
@@ -83,28 +80,6 @@ class SlackInvite extends DataObject implements PermissionProvider
             'Root.Main',
             ReadonlyField::create('InvitedStatus', 'Invite successful', $this->dbObject('Invited')->Nice())
         );
-
-        return $fields;
-    }
-
-    /**
-     * If BetterButtons is installed, add a button to resend or retry
-     * @return mixed
-     */
-    public function getBetterButtonsActions()
-    {
-        $fields = parent::getBetterButtonsActions();
-        if ($this->Invited) {
-            $fields->push(
-                BetterButtonCustomAction::create('resendInvite', 'Resend')
-                    ->setRedirectType(BetterButtonCustomAction::REFRESH)
-            );
-        } else {
-            $fields->push(
-                BetterButtonCustomAction::create('resendInvite', 'Retry')
-                    ->setRedirectType(BetterButtonCustomAction::REFRESH)
-            );
-        }
 
         return $fields;
     }
@@ -174,7 +149,7 @@ class SlackInvite extends DataObject implements PermissionProvider
         $service = new Client(['base_uri' => $config->SlackURL]);
 
         $response = $service->request('POST', '/api/users.admin.invite?t=' . $now, $params);
-        $result = Convert::json2array($response->getBody());
+        $result = json_decode($response->getBody(), true);
 
         $this->handleResult($result);
 
@@ -202,9 +177,13 @@ class SlackInvite extends DataObject implements PermissionProvider
     public function handleResult($result)
     {
         if (isset($result['error'])) {
-            $this->Message = static::$messages[$result['error']];
+            if (array_key_exists($result['error'], static::$messages)) {
+                $this->Message = static::$messages[$result['error']];
+            } else {
+                $this->Message = 'Got error type ' . $result['error'];
+            }
 
-            if ($result['error'] === 'already_invited' || $result['error'] === 'already_in_team') {
+            if (in_array($result['error'], ['already_invited', 'already_in_team', 'already_in_team_invited_user'])) {
                 $this->Message .= '; Invite successful';
                 $this->Invited = true;
             }

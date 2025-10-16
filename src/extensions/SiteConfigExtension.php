@@ -109,7 +109,7 @@ class SiteConfigExtension extends Extension
                 'Root.Slack',
                 [
                     $secretField = CheckboxField::create('ClearSecrets', $this->owner->fieldLabel('ClearSecrets')),
-                    ReadonlyField::create('Usercount', 'Users on slack', SlackStatusController::create()->usercount())
+                    ReadonlyField::create('Usercount', 'Num users on slack', SlackStatusController::create()->usercount())
                 ]
             );
             $secretField->setDescription(static::$helptexts['ClearSecrets']);

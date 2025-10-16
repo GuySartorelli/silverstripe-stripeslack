@@ -2,9 +2,11 @@
 
 namespace Firesphere\StripeSlack\Form;
 
+use Firesphere\StripeSlack\Controller\StripeSlackPageController;
 use Firesphere\StripeSlack\Model\SlackInvite;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPResponse;
+use SilverStripe\Core\Validation\ValidationResult;
 use SilverStripe\Forms\EmailField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
@@ -115,16 +117,32 @@ class SlackSignupForm extends Form
     {
         $config = SiteConfig::current_site_config();
         if (!$success) {
+            // Redirect to the failure page if there is one
             if ($config->SlackErrorBackURLID) {
                 return $this->controller->redirect($config->SlackErrorBackURL()->Link());
             }
 
-            return $this->controller->redirect($this->controller->Link('oops'));
+            // Use the failure template if we're using the right controller
+            if ($this->controller instanceof StripeSlackPageController) {
+                return $this->controller->redirect($this->controller->Link('oops'));
+            }
+
+            // Fall back to a standard message
+            $this->sessionError(_t('SlackSignupForm.Failure', 'Failed to send invite. Please retry again.'));
+            return $this->controller->redirectBack();
         }
+        // Redirect to the success page if there is one
         if ($config->SlackBackURLID) {
             return $this->controller->redirect($config->SlackBackURL()->Link());
         }
 
-        return $this->controller->redirect($this->controller->Link('success'));
+        // Use the success template if we're using the right controller
+        if ($this->controller instanceof StripeSlackPageController) {
+            return $this->controller->redirect($this->controller->Link('yay'));
+        }
+
+        // Fall back to a standard message
+        $this->sessionMessage(_t('SlackSignupForm.Success', 'Invite sent successfully.'), ValidationResult::TYPE_GOOD);
+        return $this->controller->redirectBack();
     }
 }

@@ -4,6 +4,8 @@ namespace Firesphere\StripeSlack\Actions;
 
 use Firesphere\StripeSlack\Model\SlackInvite;
 use SilverStripe\Control\Controller;
+use SilverStripe\Core\Manifest\VersionProvider;
+use SilverStripe\Forms\GridField\AbstractGridFieldComponent;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridField_ActionProvider;
 use SilverStripe\Forms\GridField\GridField_ColumnProvider;
@@ -15,7 +17,7 @@ use SilverStripe\SiteConfig\SiteConfig;
 /**
  * class GridfieldInviteResendAction adds the resend button to the CMS for easy re-inviting
  */
-class GridfieldInviteResendAction implements GridField_ColumnProvider, GridField_ActionProvider
+class GridfieldInviteResendAction extends AbstractGridFieldComponent implements GridField_ColumnProvider, GridField_ActionProvider
 {
 
     /**
@@ -66,40 +68,36 @@ class GridfieldInviteResendAction implements GridField_ColumnProvider, GridField
         $config = SiteConfig::current_site_config();
         // No point in showing the re-send button, if there's no token
         if ($config->SlackToken) {
-            $field = $this->getGridField($gridField, $record);
+            $field = GridField_FormAction::create(
+                $gridField,
+                'Resend' . $record->ID,
+                false,
+                'resend',
+                ['RecordID' => $record->ID]
+            )->addExtraClass('gridfield-button-resend btn btn-secondary btn--no-text');
 
             if (!$record->Invited) {
                 $field
                     ->setAttribute('title', 'Retry invite')
-                    ->setAttribute('data-icon', 'arrow-circle-135-left')
+                    ->setIcon('attention-1')
                     ->setDescription(_t('GridfieldInviteResendAction.Resend', 'Retry failed invitation'));
             } else {
                 $field
                     ->setAttribute('title', 'Resend invite')
-                    ->setAttribute('data-icon', 'arrow-circle-double')
+                    ->setIcon('sync')
                     ->setDescription('Resend invite');
+            }
+
+            $frameworkVersion = VersionProvider::singleton()->getModuleVersion('silverstripe/framework');
+            $isSensibleVersion = preg_match('/^(?<version>[0-9]+(?:\.[0-9]+)?)(?:\.[0-9]+)?(?<dev>.x-dev)?$/', $frameworkVersion, $match);
+            if ($isSensibleVersion) {
+                if ($match['version'] < '6.2' && (!$match['dev'] || strlen($match['version']) > 1)) {
+                    $field->addExtraClass('font-icon-' . $field->getIcon());
+                }
             }
 
             return $field->Field();
         }
-    }
-
-    /**
-     * @param $gridField
-     * @param $record
-     * @return GridField_FormAction
-     */
-    private function getGridField($gridField, $record)
-    {
-        $field = GridField_FormAction::create(
-            $gridField,
-            'Resend' . $record->ID,
-            false,
-            'resend',
-            ['RecordID' => $record->ID]
-        )->addExtraClass('gridfield-button-resend');
-
-        return $field;
     }
 
     /**
